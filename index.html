@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday 💜</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Quicksand:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #f5e6ff 0%, #e8d5f2 50%, #dcc5e8 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating elements */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0;
+            animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Landing Page */
+        .landing-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            color: #7c3aed;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(124, 58, 237, 0.1);
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 280px;
+            height: 320px;
+            background: white;
+            padding: 15px;
+            margin: 0 auto 30px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-frame:hover {
+            transform: rotate(0deg) scale(1.05);
+        }
+
+        .photo-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #e9d5ff 0%, #c4b5fd 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .photo-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #7c3aed;
+            margin-top: 10px;
+        }
+
+        .stickers {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 2.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Memories Page */
+        .memories-content {
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            z-index: 10;
+            padding: 40px 20px;
+        }
+
+        h2 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            color: #7c3aed;
+            margin-bottom: 50px;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .memory-card {
+            height: 380px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-front {
+            background: white;
+            border: 3px dashed #c4b5fd;
+        }
+
+        .memory-card:hover .card-front {
+            box-shadow: 0 12px 30px rgba(124, 58, 237, 0.25);
+        }
+
+        .camera-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .card-front p {
+            font-size: 1.3rem;
+            color: #7c3aed;
+            font-weight: 600;
+        }
+
+        .card-back {
+            background: white;
+            transform: rotateY(180deg);
+            padding: 20px;
+        }
+
+        .memory-photo {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #e9d5ff 0%, #c4b5fd 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .memory-caption {
+            font-size: 1.1rem;
+            color: #6b21a8;
+            line-height: 1.6;
+            font-weight: 500;
+            padding: 0 10px;
+        }
+
+        /* Message Page */
+        .message-content {
+            max-width: 700px;
+            text-align: center;
+            z-index: 10;
+            padding: 40px 20px;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(124, 58, 237, 0.2);
+            margin: 30px 0;
+            border: 3px solid #e9d5ff;
+        }
+
+        .message-box p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #6b21a8;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: #7c3aed;
+            margin-top: 30px;
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
+            font-size: 15px;
+            animation: sparkleFloat 3s infinite ease-in-out;
+        }
+
+        @keyframes sparkleFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .message-box {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Hearts -->
+    <div class="floating-hearts" id="hearts"></div>
+
+    <!-- Landing Page -->
+    <div class="page active" id="landing">
+        <div class="landing-content">
+            <h1>Happy Birthday to My Favorite Human 💜</h1>
+            <div class="photo-frame">
+                <img src="C:\Users\navya\Downloads\Untitled design (5).jpg" class="photo-placeholder"
+                    style="object-fit: cover;" alt="Main Photo">
+                <div class="photo-caption">My Best Friend Forever</div>
+                <div class="stickers">✨🌸</div>
+            </div>
+            <button class="btn" onclick="showPage('memories')">Continue ✨</button>
+        </div>
+    </div>
+
+    <!-- Memories Page -->
+    <div class="page" id="memories">
+        <div class="memories-content">
+            <h2>Little Moments, Big Love 💐</h2>
+            <div class="cards-container">
+                <div class="memory-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="camera-icon">📸</div>
+                            <p>Tap to reveal</p>
+                        </div>
+                        <div class="card-back">
+                            <img src="C:\Users\navya\Downloads\Untitled design (4).jpg" class="memory-photo"
+                                style="object-fit: cover;" alt="Memory 1">
+                            <p class="memory-caption">Late nights & loud laughs.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memory-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="camera-icon">📸</div>
+                            <p>Tap to reveal</p>
+                        </div>
+                        <div class="card-back">
+                            <img src="C:\Users\navya\Downloads\Untitled design (3).jpg" class="memory-photo"
+                                style="object-fit: cover;" alt="Memory 1">
+                            <p class="memory-caption">POV: dumbbell fighting back 😂</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memory-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="camera-icon">📸</div>
+                            <p>Tap to reveal</p>
+                        </div>
+                        <div class="card-back">
+                            <img src="C:\Users\navya\Downloads\Untitled design (2).jpg" class="memory-photo"
+                                style="object-fit: cover;" alt="Memory 1">
+                            <p class="memory-caption">Fear + friendship = this picture ✨</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memory-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="camera-icon">📸</div>
+                            <p>Tap to reveal</p>
+                        </div>
+                        <div class="card-back">
+                            <img src="C:\Users\navya\Downloads\Untitled design (1).jpg" class="memory-photo"
+                                style="object-fit: cover;" alt="Memory 1">
+                            <p class="memory-caption">Guess who we tolerated.😜</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memory-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="camera-icon">📸</div>
+                            <p>Tap to reveal</p>
+                        </div>
+                        <div class="card-back">
+                            <img src="C:\Users\navya\Downloads\CUsersnavyaDownloadsSnapchat-1891325395.jpg.jpg"
+                                class="memory-photo" style="object-fit: cover;" alt="Memory 1">
+                            <p class="memory-caption">No explanation needed!!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memory-card" onclick="flipCard(this)">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="camera-icon">📸</div>
+                            <p>Tap to reveal</p>
+                        </div>
+                        <div class="card-back">
+                            <img src="C:\Users\navya\Downloads\CUsersnavyaDownloadsSnapchat-1891325395.jpg (1).jpg"
+                                class="memory-photo" style="object-fit: cover;" alt="Memory 1">
+                            <p class="memory-caption">Manifestation level: dangerous. 🥰</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" onclick="showPage('message')">Read Your Message 💜</button>
+        </div>
+    </div>
+
+    <!-- Message Page -->
+    <div class="page" id="message">
+        <div class="message-content">
+            <h2>A Special Message for You 💜</h2>
+            <div class="message-box">
+                <p>Happy Birthday to the person who knows all my secrets, finishes my sentences, and still chooses to be
+                    my friend! 🎂</p>
+
+                <p>I don't know what I did to deserve a best friend like you, but I'm so grateful for every laugh, every
+                    adventure, every random 2am text, and every moment we've shared.</p>
+
+                <p>You've been there through everything - the good, the bad, and the absolutely ridiculous. You're not
+                    just my best friend; you're my soul sister, my partner in crime, and my favorite person to make
+                    memories with.</p>
+
+                <p>Here's to another year of inside jokes that no one else understands, spontaneous plans, and creating
+                    more unforgettable moments together! 🌸</p>
+
+                <p>I love you more than words can say, but I'll keep trying anyway because you deserve to hear it every
+                    single day. ✨</p>
+
+                <p class="signature">Forever & Always, Your Baby<3 💜</p>
+            </div>
+            <button class="btn" onclick="showPage('landing')">Back to Start 🌸</button>
+        </div>
+    </div>
+
+    <script>
+        // Page Navigation
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Card Flip
+        function flipCard(card) {
+            card.classList.toggle('flipped');
+        }
+
+        // Create Floating Hearts
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            const hearts = ['💜', '💝', '✨', '🌸', '🦋', '💕'];
+
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        // Create Sparkles
+        function createSparkles() {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                for (let i = 0; i < 8; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.textContent = '✨';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animationDelay = Math.random() * 3 + 's';
+                    page.appendChild(sparkle);
+                }
+            });
+        }
+
+        // Initialize
+        createHearts();
+        createSparkles();
+    </script>
+</body>
+
+</html>
